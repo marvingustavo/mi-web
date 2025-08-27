@@ -22,8 +22,7 @@
             color: #5a3d5c;
             padding: 20px;
         }
-        
-        .container {
+.container {
             max-width: 800px;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
@@ -51,8 +50,7 @@
             color: #e84393;
             animation: pulse 1.5s infinite;
         }
-        
-        @keyframes pulse {
+@keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
@@ -79,11 +77,12 @@
             position: absolute;
             width: 90%;
             left: 5%;
+            display: none; /* oculto por defecto */
         }
-        
-        .message.active {
+ .message.active {
             opacity: 1;
             transform: translateY(0);
+            display: block; /* visible solo el activo */
         }
         
         .final-message {
@@ -104,8 +103,7 @@
         .controls {
             margin: 20px 0;
         }
-        
-        button {
+ button {
             background: linear-gradient(to right, #e84393, #fd79a8);
             border: none;
             border-radius: 50px;
@@ -126,8 +124,7 @@
         button:active {
             transform: translateY(1px);
         }
-        
-        .hearts-container {
+ .hearts-container {
             position: absolute;
             width: 100%;
             height: 100%;
@@ -154,8 +151,7 @@
                 opacity: 0;
             }
         }
-        
-        .signature {
+ .signature {
             text-align: right;
             font-style: italic;
             margin-top: 30px;
@@ -179,7 +175,7 @@
             button {
                 padding: 12px 30px;
                 font-size: 1rem;
-            }
+  }
         }
     </style>
 </head>
@@ -192,11 +188,11 @@
         
         <div class="message-container" id="messageContainer">
             <div class="message active" id="message1">Cada palabra tuya se volvió una melodía en mi mente...</div>
-            <div class="message active" id="message2">Cada risa tuya, un latido en mi corazón...</div>
-            <div class="message" id="message3">No sé como explicarlo pero...</div>
-            <div class="message" id="message4">Desde el primer día que hablamos....</div>
-            <div class="message" id="message5">Algo en mí despertó.. y ese algo eres tú.....</div>
-            <div class="message" id="message6">Me gustas....</div>
+            <div class="message" id="message2">Cada risa tuya, un latido en mi corazón...</div>
+            <div class="message" id="message3">No sé cómo explicarlo pero...</div>
+            <div class="message" id="message4">Desde el primer día que hablamos...</div>
+            <div class="message" id="message5">Algo en mí despertó... y ese algo eres tú...</div>
+            <div class="message" id="message6">Me gustas...</div>
             <div class="message" id="message7">Y quería decirte que...</div>
         </div>
         
@@ -204,8 +200,7 @@
             💕 ¡ESTOY ENAMORADO DE TI, ANGELA! 💕<br>
             <span style="font-size: 1.2rem;">¿Te gustaría salir conmigo algún día? 💌</span>
         </div>
-        
-        <div class="controls">
+<div class="controls">
             <button id="startBtn">Comenzar</button>
             <button id="nextBtn" style="display: none;">Siguiente</button>
         </div>
@@ -217,12 +212,10 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const messageContainer = document.getElementById('messageContainer');
             const startBtn = document.getElementById('startBtn');
             const nextBtn = document.getElementById('nextBtn');
             const finalMessage = document.getElementById('finalMessage');
             const heartsContainer = document.getElementById('heartsContainer');
-            
             const messages = document.querySelectorAll('.message');
             let currentMessage = 0;
             
@@ -234,10 +227,8 @@
                 heart.style.left = Math.random() * 100 + 'vw';
                 heart.style.fontSize = (Math.random() * 30 + 20) + 'px';
                 heart.style.animationDuration = (Math.random() * 4 + 4) + 's';
+  heartsContainer.appendChild(heart);
                 
-                heartsContainer.appendChild(heart);
-                
-                // Eliminar el corazón después de la animación
                 setTimeout(() => {
                     heart.remove();
                 }, 6000);
@@ -250,44 +241,40 @@
                     currentMessage++;
                     messages[currentMessage].classList.add('active');
                     
-                    // Crear corazones aleatorios
                     for (let i = 0; i < 5; i++) {
                         setTimeout(createHearts, i * 300);
                     }
                 } else {
-                    // Mostrar mensaje final
                     messages[currentMessage].classList.remove('active');
                     finalMessage.classList.add('show');
                     nextBtn.style.display = 'none';
                     
-                    // Crear muchos corazones para celebrar
                     for (let i = 0; i < 20; i++) {
                         setTimeout(createHearts, i * 200);
                     }
                 }
             }
-            
+ 
             // Iniciar la declaración
             startBtn.addEventListener('click', function() {
                 startBtn.style.display = 'none';
                 nextBtn.style.display = 'inline-block';
                 
-                // Ocultar todos los mensajes excepto el primero
-                for (let i = 1; i < messages.length; i++) {
-                    messages[i].style.display = 'none';
-                }
-                
-                // Crear algunos corazones iniciales
+                messages.forEach((msg, i) => {
+                    if (i === 0) {
+                        msg.classList.add('active');
+                    } else {
+                        msg.classList.remove('active');
+                    }
+                });
+
                 for (let i = 0; i < 5; i++) {
                     setTimeout(createHearts, i * 500);
                 }
             });
             
-            // Botón siguiente
             nextBtn.addEventListener('click', showNextMessage);
-            
-            // También avanzar con clic en cualquier parte
-            messageContainer.addEventListener('click', showNextMessage);
+            document.getElementById('messageContainer').addEventListener('click', showNextMessage);
         });
     </script>
 </body>
